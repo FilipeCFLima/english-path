@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>English Path</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0e7c72">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="English Path">
+<style>
+:root{--bg:#f5f3ee;--card:#fff;--ink:#1c2b2f;--mut:#667479;--acc:#0e7c72;--accs:#d9efec;--warm:#c4501b;--ok:#17803d;--oks:#dff3e5;--bad:#b3261e;--bads:#f9e1de;--line:#e3dfd3}
+@media(prefers-color-scheme:dark){:root{--bg:#121a1c;--card:#1b2629;--ink:#e8efef;--mut:#93a4a8;--acc:#3cc4b6;--accs:#173a38;--warm:#f08a55;--ok:#5ad083;--oks:#16341f;--bad:#ff8a80;--bads:#3b1d1a;--line:#2a373a}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:18px 16px 100px}
+h1{font-size:27px;margin:4px 0 2px;letter-spacing:-.02em;line-height:1.15}
+h2{font-size:13px;margin:26px 0 8px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);font-weight:700}
+p{margin:6px 0}
+.sub{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:10px 0}
+.row{display:flex;gap:10px;align-items:center}
+.sp{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.btn{appearance:none;border:0;background:var(--acc);color:#fff;font:inherit;font-weight:650;padding:13px 18px;border-radius:12px;width:100%;cursor:pointer}
+.btn.sec{background:var(--accs);color:var(--acc)}
+.btn.ghost{background:transparent;color:var(--mut);border:1px solid var(--line)}
+.btn.warm{background:var(--warm)}
+.btn.sm{width:auto;padding:8px 14px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.45}
+.btn+.btn{margin-top:8px}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--accs);color:var(--acc)}
+.chip.w{background:#fbe6da;color:var(--warm)}
+@media(prefers-color-scheme:dark){.chip.w{background:#3d2517}}
+.item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin:8px 0;cursor:pointer}
+.item .t{font-weight:650}
+.num{font-size:30px;font-weight:750;letter-spacing:-.02em;line-height:1}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--acc);border-radius:99px;transition:width .3s}
+.ladder{display:flex;gap:6px;margin-top:10px}
+.ladder div{flex:1;text-align:center;padding:8px 0;border-radius:10px;background:var(--line);color:var(--mut);font-weight:700;font-size:14px}
+.ladder .on{background:var(--acc);color:#fff}
+.ladder .now{outline:2px solid var(--warm);outline-offset:1px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:4px 2px calc(4px + env(safe-area-inset-bottom));z-index:5}
+nav a{flex:1;text-align:center;padding:10px 0 8px;font-size:12.5px;font-weight:650;color:var(--mut);text-decoration:none;position:relative}
+nav a.on{color:var(--acc)}
+nav a.on:after{content:"";position:absolute;left:30%;right:30%;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--acc)}
+nav a b{position:absolute;top:2px;right:18%;background:var(--warm);color:#fff;border-radius:99px;font-size:10px;padding:0 5px;line-height:15px}
+.q{font-size:20px;line-height:1.4;font-weight:600;margin:14px 0}
+.blank{display:inline-block;min-width:54px;border-bottom:2px solid var(--acc);margin:0 3px}
+.opt{display:block;width:100%;text-align:left;font:inherit;padding:13px 14px;margin:8px 0;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:var(--oks)}
+.opt.bad{border-color:var(--bad);background:var(--bads)}
+.opt.idk{color:var(--mut);text-align:center;border-style:dashed}
+input[type=text],textarea{width:100%;font:inherit;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+textarea{min-height:130px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--acc)}
+.fb{padding:12px 14px;border-radius:12px;margin:12px 0;font-size:15px}
+.fb.ok{background:var(--oks);color:var(--ok)}
+.fb.bad{background:var(--bads);color:var(--bad)}
+.fb span{color:var(--ink)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:44px}
+.tile{font:inherit;font-weight:650;padding:9px 13px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tile.used{opacity:.25;pointer-events:none}
+.built{min-height:56px;border-bottom:2px solid var(--line);padding:6px 0;display:flex;flex-wrap:wrap;gap:8px}
+.built .tile{background:var(--accs);border-color:transparent;color:var(--acc)}
+.big{font-size:32px;font-weight:750;letter-spacing:-.02em;margin:6px 0}
+.say{appearance:none;border:0;background:var(--accs);color:var(--acc);width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.ex{color:var(--mut);font-style:italic}
+.seg{display:flex;background:var(--line);border-radius:12px;padding:3px;margin:8px 0 14px}
+.seg a{flex:1;text-align:center;padding:8px 0;border-radius:10px;font-size:14px;font-weight:650;color:var(--mut);text-decoration:none;cursor:pointer}
+.seg a.on{background:var(--card);color:var(--ink)}
+.rd{font-size:19px;line-height:1.75}
+.rd .w{border-radius:4px;cursor:pointer}
+.rd .w:active{background:var(--accs)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--card);border-top:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(0,0,0,.18);max-height:80vh;overflow:auto}
+.sheet>div{max-width:560px;margin:0 auto}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;z-index:20}
+.garden{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.gp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 2px 4px;text-align:center;font-size:11px;line-height:1.2;overflow:hidden}
+.gp svg{display:block;margin:0 auto}
+.gp span{display:block;padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pop{animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.seg.s5 a{font-size:13px}
+.mut{color:var(--mut)}
+.small{font-size:13px}
+.err{color:var(--bad)}
+.diff del{color:var(--bad)} .diff ins{color:var(--ok);text-decoration:none;font-weight:650}
+.hr{height:1px;background:var(--line);margin:14px 0}
+a.lnk{color:var(--acc);font-weight:650}
+.rd .w.sv{border-bottom:2px solid var(--acc)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+/* ============ DADOS BASE ============ */
+const LEVELS=['A2','B1','B2','C1'];
+const TOPIC_LABEL={pp:'Present Perfect × Past Simple',prep:'Preposições in/on/at',cond:'Condicionais',modals:'Modais',phrasal:'Phrasal verbs',reported:'Discurso indireto',relative:'Orações relativas',articles:'Artigos e quantificadores',voc:'Vocabulário',leitura:'Leitura',adv:'Gramática avançada'};
+
+const SEED=[
+['deadline','prazo','We have a tight deadline on Friday.'],['shift','turno / plantão','I work the night shift this week.'],['coworker','colega de trabalho','My coworker covered for me yesterday.'],
+['workload','carga de trabalho','Her workload doubled after the merger.'],['on duty','de serviço / de plantão','He is on duty until 6 a.m.'],['to hand in','entregar','Please hand in your report by noon.'],
+['to be in charge of','ser responsável por','Who is in charge of the schedule?'],['to catch up','pôr em dia','I need to catch up on my emails.'],['to get along with','dar-se bem com','I get along with everyone on my team.'],
+['to run late','estar atrasado','Sorry, I\'m running late.'],
+['though','embora / porém','It was cold, though the sun was out.'],['actually','na verdade','Actually, I\'ve never been there.'],['anyway','enfim / de qualquer forma','Anyway, let\'s get back to work.'],
+['barely','mal / quase não','I barely slept last night.'],['to figure out','descobrir / entender','I can\'t figure out how this works.'],['to hang out','sair / passar tempo juntos','We usually hang out on Sundays.'],
+['fed up','de saco cheio','I\'m fed up with this traffic.'],['I guess','acho que','I guess you\'re right.'],['whatever','tanto faz / seja o que for','Whatever you decide is fine with me.'],['to mean','querer dizer','What do you mean by that?'],
+['to binge-watch','maratonar','We binge-watched the whole season.'],['plot twist','reviravolta','That plot twist was unexpected.'],['subtitles','legendas','I prefer English subtitles.'],['spoiler','revelação do enredo','No spoilers, please!'],
+['release date','data de lançamento','The release date was postponed.'],['to stream','transmitir / assistir online','I stream music while I cook.'],['cast','elenco','The cast is amazing.'],['to level up','subir de nível','You level up after each mission.'],
+['to get stuck','ficar preso / travar','I got stuck on the last level.'],['to unlock','desbloquear','You can unlock new skills later.'],
+['to give up','desistir','Don\'t give up now.'],['to look forward to','aguardar com expectativa','I look forward to meeting you.'],['to come up with','ter a ideia de / bolar','She came up with a great plan.'],
+['to break down','quebrar / pifar','The car broke down on the highway.'],['to pick up','pegar / buscar / aprender','I picked up some Spanish while traveling.'],['to turn out','acabar sendo / revelar-se','It turned out to be a mistake.'],
+['to end up','acabar (fazendo/ficando)','We ended up staying home.'],['to cut down on','reduzir','I\'m trying to cut down on sugar.'],['to show up','aparecer','He didn\'t show up to the meeting.'],['to work out','dar certo / malhar','Things will work out.']
+];
+
+const LESSONS=[
+{id:'articles',lvl:'A2',title:'Artigos e quantificadores',intro:'<p><b>a / an</b>: algo singular e contável, primeira menção (<i>an engineer</i>, <i>a shift</i>). <b>the</b>: algo específico, único ou já mencionado. <b>Sem artigo</b>: plural ou incontável em sentido geral (<i>I love music</i>).</p><p><b>many</b> + contável (many chairs) · <b>much</b> + incontável (much time, geralmente em negativas/perguntas) · <b>a few</b> = alguns (contável) · <b>a little</b> = um pouco (incontável) · <b>a lot of</b> serve para os dois.</p>',
+ ex:[{t:'mc',q:'There isn\'t ___ milk left.',opts:['many','much','a few','few'],a:1,why:'Milk é incontável, e em negativa usamos <b>much</b>.'},
+ {t:'mc',q:'She\'s ___ honest person.',opts:['a','an','the','—'],a:1,why:'<i>honest</i> começa com som de vogal (o "h" é mudo): <b>an</b>.'},
+ {t:'fill',q:'There are ___ chairs in the room, so we can sit. (alguns)',a:['a few'],why:'Contável + sentido positivo: <b>a few</b>.'},
+ {t:'mc',q:'___ sun rises in the east.',opts:['A','An','The','—'],a:2,why:'Algo único no mundo leva <b>the</b>.'},
+ {t:'mc',q:'I love ___.',opts:['the music','a music','music','musics'],a:2,why:'Música em geral é incontável e sem artigo.'}]},
+{id:'prep',lvl:'A2',title:'Preposições in / on / at',intro:'<p><b>Tempo</b> — <b>at</b>: horas e momentos (<i>at 7 a.m., at night</i>) · <b>on</b>: dias e datas (<i>on Monday, on May 5th</i>) · <b>in</b>: meses, anos, períodos (<i>in July, in 2024, in the morning</i>).</p><p><b>Lugar</b> — <b>at</b>: ponto (<i>at the door, at work</i>) · <b>in</b>: espaço fechado/cidade (<i>in the car, in Rio</i>) · <b>on</b>: superfície/transporte coletivo (<i>on the table, on the bus</i>).</p>',
+ ex:[{t:'mc',q:'The shift starts ___ 7 a.m.',opts:['at','on','in','by'],a:0,why:'Hora exata: <b>at</b>.'},
+ {t:'mc',q:'My birthday is ___ March.',opts:['at','on','in','of'],a:2,why:'Meses usam <b>in</b>.'},
+ {t:'fill',q:'We met ___ Friday morning.',a:['on'],why:'Dia da semana (mesmo com a parte do dia): <b>on</b>.'},
+ {t:'mc',q:'I left my phone ___ the bus.',opts:['in','at','on','to'],a:2,why:'Transporte coletivo: <b>on</b> the bus/train/plane. (Carro e táxi: <i>in</i>.)'},
+ {t:'fill',q:'She\'s waiting ___ the entrance.',a:['at'],why:'Ponto específico: <b>at</b>.'}]},
+{id:'pp',lvl:'B1',title:'Present Perfect × Past Simple',intro:'<p><b>Past Simple</b>: ação terminada em momento definido (<i>yesterday, last week, in 2020, two days ago</i>).</p><p><b>Present Perfect</b> (<i>have/has + particípio</i>): experiência sem data, ou algo que começou no passado e ainda importa agora. Palavras-chave: <i>for, since, already, yet, ever, never, just</i>.</p><p><i>I lived in SP in 2015.</i> (terminou) · <i>I\'ve lived in Rio since 2015.</i> (ainda moro)</p>',
+ ex:[{t:'mc',q:'She ___ the report an hour ago.',opts:['has finished','finished','finishes','has been finishing'],a:1,why:'<i>ago</i> pede Past Simple.'},
+ {t:'fill',q:'I ___ (not / see) that movie yet.',a:['haven\'t seen','have not seen'],why:'<i>yet</i> + experiência até agora: Present Perfect.'},
+ {t:'mc',q:'We ___ each other since 2018.',opts:['know','knew','have known','are knowing'],a:2,why:'<i>since</i> + verbo de estado: <b>have known</b>.'},
+ {t:'order',words:['Have','you','ever','been','to','London'],a:'Have you ever been to London?',why:'Pergunta de experiência: <i>Have you ever + particípio</i>.'},
+ {t:'fill',q:'Last year, they ___ (move) to Nova Iguaçu.',a:['moved'],why:'<i>Last year</i> = tempo definido: Past Simple.'}]},
+{id:'modals',lvl:'B1',title:'Modais: must, have to, should, might',intro:'<p><b>must</b>: obrigação forte ou certeza · <b>have to</b>: obrigação externa · <b>should</b>: conselho · <b>might / may</b>: possibilidade · <b>could / can</b>: capacidade e pedidos educados.</p><p>Cuidado: <b>don\'t have to</b> = não é necessário · <b>mustn\'t</b> = é proibido.</p>',
+ ex:[{t:'mc',q:'You ___ park here. It\'s forbidden.',opts:['don\'t have to','mustn\'t','shouldn\'t have','might not'],a:1,why:'Proibição: <b>mustn\'t</b>.'},
+ {t:'mc',q:'You ___ come tomorrow; it\'s optional.',opts:['mustn\'t','can\'t','don\'t have to','shouldn\'t'],a:2,why:'Não é necessário: <b>don\'t have to</b>.'},
+ {t:'fill',q:'You look tired. You ___ get some rest. (conselho)',a:['should'],why:'Conselho: <b>should</b>.'},
+ {t:'mc',q:'It ___ rain later, so take an umbrella.',opts:['must','might','has to','will have'],a:1,why:'Possibilidade: <b>might</b>.'},
+ {t:'order',words:['Could','you','help','me','with','this','report'],a:'Could you help me with this report?',why:'Pedido educado: <i>Could you + verbo base</i>.'}]},
+{id:'cond',lvl:'B1',title:'Condicionais e wish',intro:'<p><b>0</b>: If + presente, presente (verdades). <b>1</b>: If + presente, <i>will</i> (possível). <b>2</b>: If + passado, <i>would</i> (hipótese agora). <b>3</b>: If + <i>had</i> + particípio, <i>would have</i> + particípio (passado irreal).</p><p><b>wish</b> + passado = desejo sobre o presente: <i>I wish I had more time.</i> No tipo 2 usamos <b>were</b> para todos: <i>If I were you…</i></p>',
+ ex:[{t:'mc',q:'If I ___ you, I would ask for a raise.',opts:['am','were','will be','would be'],a:1,why:'Tipo 2 usa <b>were</b> (If I were you).'},
+ {t:'fill',q:'If you heat ice, it ___ (melt).',a:['melts'],why:'Tipo 0 (verdade geral): presente simples.'},
+ {t:'mc',q:'If we had left earlier, we ___ the train.',opts:['would catch','would have caught','will catch','had caught'],a:1,why:'Tipo 3: <b>would have + particípio</b>.'},
+ {t:'order',words:['If','it','rains','we','will','stay','home'],a:'If it rains, we will stay home.',why:'Tipo 1: If + presente, will + verbo.'},
+ {t:'fill',q:'I wish I ___ (have) more free time.',a:['had'],why:'<i>wish</i> + passado para o presente irreal.'}]},
+{id:'phrasal',lvl:'B1',title:'Phrasal verbs do dia a dia',intro:'<p>Verbo + partícula muda o sentido. Alguns aceitam objeto no meio (<i>turn the TV off / turn it off</i>), outros não (<i>look after kids</i>).</p><p><b>deal with</b> lidar com · <b>put off</b> adiar · <b>run out of</b> ficar sem · <b>look into</b> investigar · <b>set up</b> montar/configurar · <b>carry out</b> executar · <b>find out</b> descobrir.</p>',
+ ex:[{t:'mc',q:'We need to ___ this problem before the inspection.',opts:['deal with','run out of','put off','set up'],a:0,why:'<b>deal with</b> = lidar com / resolver.'},
+ {t:'mc',q:'The team will ___ the meeting until next week.',opts:['find out','carry out','look into','put off'],a:3,why:'<b>put off</b> = adiar.'},
+ {t:'fill',q:'We\'ve ___ out of coffee. Can you buy some? (run)',a:['run'],why:'<b>run out of</b> = ficar sem (o verbo é "run": have run out).'},
+ {t:'mc',q:'The police will ___ the accident.',opts:['look into','put up','turn out','give in'],a:0,why:'<b>look into</b> = investigar.'},
+ {t:'fill',q:'Please ___ up the new system before Monday.',a:['set'],why:'<b>set up</b> = montar / configurar.'}]},
+{id:'reported',lvl:'B2',title:'Discurso indireto',intro:'<p>Ao reportar, o verbo recua um tempo: presente → passado, passado → <i>past perfect</i>, <i>will</i> → <i>would</i>, <i>can</i> → <i>could</i>. Marcadores mudam: <i>today → that day, tomorrow → the next day, here → there</i>.</p><p><b>say</b> (sem objeto: <i>he said that…</i>) × <b>tell</b> (com objeto: <i>he told me that…</i>).</p>',
+ ex:[{t:'mc',q:'He said, "I am tired." → He said he ___ tired.',opts:['is','was','has been','will be'],a:1,why:'Presente recua para passado.'},
+ {t:'mc',q:'She told me she ___ the email the day before.',opts:['sent','sends','had sent','has sent'],a:2,why:'Passado recua para <b>past perfect</b>.'},
+ {t:'fill',q:'"I will call you tomorrow," he said. → He said he ___ call me the next day.',a:['would'],why:'<i>will</i> vira <b>would</b>.'},
+ {t:'mc',q:'He ___ me that the meeting was cancelled.',opts:['said','told','spoke','talked'],a:1,why:'Com objeto (me), usa-se <b>told</b>.'},
+ {t:'order',words:['She','said','she','was','leaving'],a:'She said she was leaving.',why:'<i>She said she was leaving</i> — recuo de tempo.'}]},
+{id:'relative',lvl:'B2',title:'Orações relativas',intro:'<p><b>who</b> (pessoas) · <b>which</b> (coisas) · <b>that</b> (pessoas/coisas, sem vírgula) · <b>whose</b> (posse) · <b>where</b> (lugar).</p><p>Sem vírgula (essencial): <i>The man who called…</i> Com vírgulas (extra): <i>My boss, who lives in Niterói, …</i> — aqui <b>não</b> se usa <i>that</i>.</p>',
+ ex:[{t:'mc',q:'The colleague ___ helped me is on leave.',opts:['who','which','whose','where'],a:0,why:'Pessoa que faz a ação: <b>who</b>.'},
+ {t:'mc',q:'That\'s the woman ___ son plays for Flamengo.',opts:['who','that','whose','which'],a:2,why:'Posse: <b>whose</b>.'},
+ {t:'fill',q:'This is the station ___ I take the train.',a:['where'],why:'Lugar: <b>where</b>.'},
+ {t:'mc',q:'My boss, ___ lives in Niterói, is retiring.',opts:['that','who','which','whose'],a:1,why:'Entre vírgulas não usa <i>that</i>; pessoa → <b>who</b>.'},
+ {t:'fill',q:'The book ___ I bought yesterday is great.',a:['that','which'],why:'Coisa: <b>that</b> ou <b>which</b>.'}]}
+];
+
+const PLACEMENT=[
+{lvl:'A2',topic:'pp',t:'mc',q:'She ___ to the market yesterday.',opts:['go','goes','went','gone'],a:2,why:'<i>yesterday</i> pede Past Simple: <b>went</b>.'},
+{lvl:'A2',topic:'prep',t:'mc',q:'I\'ll meet you ___ Monday.',opts:['in','on','at','by'],a:1,why:'Dias da semana usam <b>on</b>.'},
+{lvl:'A2',topic:'phrasal',t:'mc',q:'Can you ___ the lights? It\'s too dark.',opts:['turn on','turn up','turn in','turn at'],a:0,why:'<b>turn on</b> = ligar.'},
+{lvl:'A2',topic:'articles',t:'mc',q:'She is ___ engineer.',opts:['a','an','the','—'],a:1,why:'Som de vogal: <b>an</b>.'},
+{lvl:'B1',topic:'pp',t:'mc',q:'I ___ in Rio for ten years.',opts:['live','lived','have lived','am living'],a:2,why:'<i>for ten years</i> (ainda moro): <b>have lived</b>.'},
+{lvl:'B1',topic:'cond',t:'mc',q:'If it rains tomorrow, we ___ at home.',opts:['stay','will stay','would stay','stayed'],a:1,why:'Condicional tipo 1: <b>will</b>.'},
+{lvl:'B1',topic:'modals',t:'mc',q:'You ___ wear a seatbelt; it\'s the law.',opts:['might','must','could','would'],a:1,why:'Obrigação: <b>must</b>.'},
+{lvl:'B1',topic:'phrasal',t:'mc',q:'I can\'t ___ with this noise any longer.',opts:['put up','put off','put on','put out'],a:0,why:'<b>put up with</b> = suportar.'},
+{lvl:'B1',topic:'leitura',t:'mc',q:'"Tom missed the 8:00 train, so he took a taxi. He arrived ten minutes late, but his boss didn\'t mind because the meeting hadn\'t started." — Why wasn\'t the boss upset?',opts:['Tom called ahead','The meeting hadn\'t started yet','Tom brought coffee','Tom had a good excuse'],a:1,why:'O texto diz que a reunião ainda não tinha começado.'},
+{lvl:'B2',topic:'cond',t:'mc',q:'If I ___ harder, I would have passed the exam.',opts:['studied','had studied','would study','have studied'],a:1,why:'Tipo 3: <b>had studied</b>.'},
+{lvl:'B2',topic:'reported',t:'mc',q:'She said she ___ the report the day before.',opts:['finishes','finished','had finished','has finished'],a:2,why:'Discurso indireto: <b>had finished</b>.'},
+{lvl:'B2',topic:'relative',t:'mc',q:'The man ___ car was stolen called the police.',opts:['who','whose','which','that'],a:1,why:'Posse: <b>whose</b>.'},
+{lvl:'B2',topic:'prep',t:'mc',q:'I\'m not very ___ on horror movies.',opts:['keen','fond','interested','like'],a:0,why:'<b>keen on</b> (fond of / interested in).'},
+{lvl:'B2',topic:'cond',t:'mc',q:'I wish I ___ more time to study.',opts:['have','had','would have','having'],a:1,why:'<i>wish</i> + passado.'},
+{lvl:'B2',topic:'leitura',t:'mc',q:'"Although remote work reduces commuting costs, several studies suggest that employees working from home often feel isolated, which can lower long-term productivity." — What is the main idea?',opts:['Remote work always lowers costs','Remote work has benefits but also a possible downside','Commuting is the main cause of isolation','Studies prove productivity rises'],a:1,why:'<i>Although…</i> contrasta benefício e risco.'},
+{lvl:'C1',topic:'adv',t:'mc',q:'Not only ___ late, but he also forgot the documents.',opts:['he was','was he','he is','is he'],a:1,why:'Inversão após <i>Not only</i>: <b>was he</b>.'},
+{lvl:'C1',topic:'relative',t:'mc',q:'The project, ___ had been delayed twice, was finally approved.',opts:['that','which','who','what'],a:1,why:'Oração não essencial entre vírgulas: <b>which</b>.'},
+{lvl:'C1',topic:'voc',t:'mc',q:'Her argument was so ___ that nobody could refute it.',opts:['compelling','compulsive','compulsory','complex'],a:0,why:'<b>compelling</b> = convincente.'},
+{lvl:'C1',topic:'adv',t:'mc',q:'Hardly had we arrived ___ it started to rain.',opts:['than','when','then','as'],a:1,why:'<i>Hardly… when</i>.'},
+{lvl:'C1',topic:'adv',t:'mc',q:'By this time next year, I ___ my degree.',opts:['will finish','will have finished','am finishing','have finished'],a:1,why:'Future Perfect: <b>will have finished</b>.'}
+];
+
+const CHANNELS=[
+['BBC Learning English','B1–B2','6 Minute English e vídeos curtos, com transcrição','BBC Learning English 6 Minute English'],
+['English with Lucy','B1–C1','Gramática clara e vocabulário natural','English with Lucy'],
+['Rachel\'s English','B1–C1','Pronúncia americana, passo a passo','Rachel\'s English American pronunciation'],
+['Speak English With Vanessa','B1–B2','Conversação e listening em ritmo natural','Speak English With Vanessa'],
+['TED-Ed','B2–C1','Animações curtas; ligue a legenda em inglês','TED-Ed'],
+['TED Talks','B2–C1','Falas longas, vocabulário amplo','TED Talks'],
+['Kurzgesagt','B2–C1','Ciência com narração clara e legenda em inglês','Kurzgesagt In a Nutshell'],
+['Easy English','A2–B1','Entrevistas de rua, legenda dupla','Easy English street interviews']
+];
+
+/* ============ UTIL ============ */
+const $app=document.getElementById('app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DAY=864e5;
+const ymd=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const today=()=>ymd(Date.now());
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h).toString(36)};
+const normA=s=>String(s).toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g,' ').trim().replace(/[.,!?;]+$/,'');
+const normO=s=>String(s).toLowerCase().replace(/[^a-z0-9' ]/g,'').replace(/\s+/g,' ').trim();
+
+/* ============ ESTADO ============ */
+function fresh(){return{v:1,t:0,level:null,placement:null,goal:8,topics:{},lessons:{},intro:{d:'',n:0},streak:{last:'',n:0},days:{},exSeen:[],
+ cards:SEED.map((w,i)=>({id:'s'+i,en:w[0],pt:w[1],ex:w[2]||'',st:'new',n:0,iv:0,ef:2.5,due:0,src:'base'}))}}
+let S=fresh(),EX={lessons:[],videos:[],words:[],note:''};
+let DB=null,dbRef=null,SMP=null,TTS=null,saveT=null;
+const V={tab:'hoje',sub:'novas',rsub:'ler'};
+
+function snapData(s){if(!s)return null;try{const ex=typeof s.exists==='function'?s.exists():s.exists;if(ex===false)return null;return typeof s.data==='function'?s.data():s}catch(e){return null}}
+function save(){S.t=Date.now();try{localStorage.setItem('ep_state',JSON.stringify(S))}catch(e){}
+ clearTimeout(saveT);saveT=setTimeout(async()=>{if(!dbRef)return;try{await dbRef.set({json:JSON.stringify(S),t:S.t})}catch(e){}},900)}
+function allLessons(){return LESSONS.concat((EX.lessons||[]).filter(l=>l&&l.id&&l.ex))}
+function touch(k,n){const d=today();const o=S.days[d]=S.days[d]||{ex:0,rev:0,nw:0};o[k]=(o[k]||0)+(n||1);
+ if(S.streak.last!==d){S.streak.n=S.streak.last===ymd(Date.now()-DAY)?S.streak.n+1:1;S.streak.last=d}save()}
+function noteTopic(t,ok){if(!t)return;const o=S.topics[t]=S.topics[t]||{r:0,w:0};ok?o.r++:o.w++}
+const acc=t=>{const o=S.topics[t];return o&&o.r+o.w?o.r/(o.r+o.w):null};
+const dueCards=()=>S.cards.filter(c=>c.st!=='new'&&c.due<=Date.now());
+const newLeft=()=>{if(S.intro.d!==today()){S.intro={d:today(),n:0}}return Math.max(0,S.goal-S.intro.n)};
+
+async function init(){
+ let local=null;try{local=JSON.parse(localStorage.getItem('ep_state')||'null')}catch(e){}
+ if(local&&local.cards)S=local;
+ route();render();
+ try{
+  if(!window.claude||!claude.use)return;
+  claude.use('tts').then(t=>{TTS=t}).catch(()=>{});
+  claude.use('sample').then(s=>{SMP=s;render()}).catch(()=>{});
+  const db=await claude.use('db');
+  if(db){DB=db;dbRef=db.doc('progress/state');
+   try{const d=snapData(await dbRef.get());if(d&&d.json){const r=JSON.parse(d.json);if(r&&r.cards&&(!local||(r.t||0)>(local.t||0)))S=r}}catch(e){}
+   try{const d=snapData(await db.doc('content/extra').get());if(d&&d.json){EX=Object.assign(EX,JSON.parse(d.json));mergeExtra()}}catch(e){}
+   render()}
+ }catch(e){}
+}
+function mergeExtra(){const seen=new Set(S.exSeen||[]);let add=0;
+ (EX.words||[]).forEach(w=>{const id='x'+hash((w[0]||'').toLowerCase());if(seen.has(id)||S.cards.some(c=>c.en.toLowerCase()===String(w[0]).toLowerCase()))return;
+  S.cards.push({id,en:w[0],pt:w[1]||'',ex:w[2]||'',st:'new',n:0,iv:0,ef:2.5,due:0,src:'claude'});seen.add(id);add++});
+ S.exSeen=[...seen];if(add)save()}
+
+/* ============ SONS (sintetizados, sem arquivos) ============ */
+let AC=null;
+function ac(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}catch(e){return null}}
+function tone(f,t0,dur,type,vol){const a=ac();if(!a)return;try{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+t0;o.type=type||'sine';o.frequency.value=f;
+ g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.18,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+.03)}catch(e){}}
+function sfx(k){if(S.sound===false)return;
+ if(k==='ok'){tone(784,0,.2,'sine',.2);tone(1175,.1,.32,'sine',.2);tone(2350,.1,.2,'triangle',.03)}
+ else if(k==='bloom'){[523,659,784,1047,1319,1568].forEach((f,i)=>tone(f,i*.075,.4,'sine',.17))}
+ else if(k==='bad'){tone(247,0,.16,'triangle',.17);tone(185,.11,.3,'triangle',.17)}}
+
+/* ============ BUSCA GRATUITA (fora do Claude) ============ */
+const POS={noun:'substantivo',verb:'verbo',adjective:'adjetivo',adverb:'advérbio',pronoun:'pronome',preposition:'preposição',conjunction:'conjunção',interjection:'interjeição',exclamation:'exclamação',determiner:'determinante'};
+async function getJson(u){const r=await fetch(u);if(!r.ok)throw new Error('Serviço indisponível agora.');return r.json()}
+async function translateFree(t){const d=await getJson('https://api.mymemory.translated.net/get?q='+encodeURIComponent(String(t).slice(0,480))+'&langpair=en|pt-BR');
+ const x=(d.responseData&&d.responseData.translatedText)||'';
+ if(d.responseStatus==429||/MYMEMORY WARNING|QUERY LENGTH/i.test(x))throw new Error('Limite diário da tradução gratuita atingido. Tente amanhã.');return x}
+async function freeLookup(w){const out={pt:'',alts:[],classe:'',nota:'',ipa:'',lema:''};
+ const [mm,dd]=await Promise.allSettled([getJson('https://api.mymemory.translated.net/get?q='+encodeURIComponent(w)+'&langpair=en|pt-BR'),getJson('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(w.toLowerCase()))]);
+ if(mm.status==='fulfilled'){const d=mm.value,all=[(d.responseData&&d.responseData.translatedText)||''].concat((d.matches||[]).map(m=>m.translation)),set=[];
+  all.forEach(t=>{t=String(t||'').trim().toLowerCase().replace(/[.!]+$/,'');if(t&&!/mymemory/i.test(t)&&t!==w.toLowerCase()&&!set.includes(t)&&set.length<4)set.push(t)});out.pt=set[0]||'';out.alts=set.slice(1)}
+ if(dd.status==='fulfilled'&&Array.isArray(dd.value)&&dd.value[0]){const e=dd.value[0];out.lema=e.word||'';out.ipa=e.phonetic||((e.phonetics||[]).find(p=>p.text)||{}).text||'';
+  const m=(e.meanings||[])[0];if(m){out.classe=POS[m.partOfSpeech]||m.partOfSpeech||'';const df=(m.definitions||[])[0];if(df)out.nota='Definição: '+df.definition}}
+ if(!out.pt&&!out.nota)throw new Error('Não encontrei. Sem conexão ou palavra rara; digite a tradução.');return out}
+
+/* ============ ÁUDIO ============ */
+async function speak(t){
+ try{if(TTS){await TTS.speak(t,{language:'en'});return}}catch(e){}
+ try{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.92;const vs=speechSynthesis.getVoices();
+  const v=vs.find(v=>v.lang==='en-US')||vs.find(v=>/^en/.test(v.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u)}
+ catch(e){toast('Áudio indisponível aqui')}
+}
+let toastT=null;
+function toast(m){const old=document.querySelector('.toast');if(old)old.remove();const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);clearTimeout(toastT);toastT=setTimeout(()=>d.remove(),2200)}
+async function copy(text){try{await navigator.clipboard.writeText(text);toast('Copiado')}catch(e){V.copyText=text;render();toast('Selecione e copie o texto')}}
+
+/* ============ SRS ============ */
+function nextIv(c,g){const x=Object.assign({},c);applyGrade(x,g);return x.iv}
+function applyGrade(c,g){
+ if(g===0){c.n=0;c.iv=0;c.ef=Math.max(1.3,c.ef-.2);c.due=Date.now()+60e3;c.lapses=(c.lapses||0)+1;return}
+ c.n=(c.n||0)+1;
+ if(c.n===1)c.iv=g===3?3:1;
+ else if(c.n===2)c.iv=g===1?3:g===2?6:9;
+ else c.iv=Math.max(1,Math.round(c.iv*(g===1?1.2:g===2?c.ef:c.ef*1.3)));
+ if(g===1)c.ef=Math.max(1.3,c.ef-.15);if(g===3)c.ef=c.ef+.1;
+ c.due=Date.now()+c.iv*DAY}
+const ivLabel=d=>d===0?'1 min':d<30?d+(d===1?' dia':' dias'):Math.round(d/30)+' mês';
+function addErrCard(it){
+ const q=it.t==='order'?'Ordene: '+it.words.join(' / '):it.q;
+ const a=it.t==='mc'?it.opts[it.a]:it.t==='fill'?it.a[0]:it.a;
+ const id='q'+hash(q);if(S.cards.some(c=>c.id===id))return;
+ S.cards.push({id,kind:'q',q,a,why:it.why||'',en:q,pt:a,st:'learn',n:0,iv:0,ef:2.5,due:Date.now()+10*60e3,src:'erro'})}
+
+/* ============ RUNNER DE EXERCÍCIOS ============ */
+function startRun(o){V.run=Object.assign({i:0,ok:0,wrong:[],log:[],res:null,sel:null,built:[],ord:null,done:false},o);V.tab=V.tab;render()}
+function curItem(){return V.run.items[V.run.i]}
+function answer(ok,given){const r=V.run,it=curItem();r.res={ok,given};if(ok)r.ok++;else r.wrong.push(it);
+ noteTopic(it.topic,ok);touch('ex');r.log.push({it,ok});if(r.kind!=='test')sfx(ok?'ok':'bad');
+ if(!ok&&r.kind!=='test')addErrCard(it);
+ if(r.kind==='test'){next();return}
+ save();render()}
+function next(){const r=V.run;r.i++;r.res=null;r.sel=null;r.built=[];r.ord=null;if(r.i>=r.items.length)finishRun();else render()}
+function finishRun(){const r=V.run;r.done=true;
+ if(r.kind==='test'){const by={A2:[0,0],B1:[0,0],B2:[0,0],C1:[0,0]};r.log.forEach(x=>{const b=by[x.it.lvl];b[1]++;if(x.ok)b[0]++});
+  const pass=l=>by[l][1]&&by[l][0]/by[l][1]>=.6;let lvl='A1';for(const l of LEVELS){if(pass(l))lvl=l;else break}
+  S.level=lvl;S.placement={date:today(),by,wrong:[...new Set(r.log.filter(x=>!x.ok).map(x=>x.it.topic))]};r.resultLevel=lvl}
+ if(r.kind==='lesson'){const p=Math.round(r.ok/r.items.length*100);const o=S.lessons[r.lessonId]=S.lessons[r.lessonId]||{best:0,tries:0};o.best=Math.max(o.best,p);o.tries++;o.last=today()}
+ save();render()}
+function runView(){const r=V.run;
+ if(r.done){const n=r.items.length,p=Math.round(r.ok/n*100);
+  if(r.kind==='test')return `<h1>Resultado do teste</h1><div class="card"><div class="sub">Nível estimado</div><div class="num" style="font-size:48px;color:var(--acc)">${esc(r.resultLevel==='A1'?'A1–A2':r.resultLevel)}</div><p class="sub">${r.ok} de ${n} corretas. O teste é uma estimativa: o app vai refinando conforme você estuda.</p>${ladder()}</div>
+  ${r.wrong.length?`<h2>Para reforçar</h2><div class="card">${[...new Set(r.wrong.map(x=>x.topic))].map(t=>`<div class="row sp" style="padding:4px 0"><span>${esc(TOPIC_LABEL[t]||t)}</span></div>`).join('')}<p class="sub small">Os erros já entraram na sua revisão.</p></div>`:''}
+  <button class="btn" data-a="endrun" data-v="hoje">Ver meu plano de hoje</button>`;
+  return `<h1>${p>=80?'Muito bem!':p>=60?'Bom trabalho':'Vale repetir'}</h1><div class="card"><div class="num" style="color:var(--acc)">${r.ok}/${n}</div><p class="sub">${p}% de acerto${r.wrong.length?' · os erros foram para a revisão':''}.</p></div>
+  ${r.wrong.length?`<h2>O que errou</h2>${r.wrong.map(it=>`<div class="card small"><b>${esc(it.t==='order'?it.a:it.q)}</b><br>${esc(it.t==='mc'?it.opts[it.a]:it.t==='fill'?it.a[0]:it.a)}<br><span class="mut">${it.why||''}</span></div>`).join('')}`:''}
+  ${r.kind==='lesson'?`<button class="btn sec" data-a="openLesson" data-v="${esc(r.lessonId)}">Refazer lição</button>`:''}
+  <button class="btn" data-a="endrun" data-v="${r.kind==='lesson'?'licoes':'hoje'}">Concluir</button>`}
+ const it=curItem(),pct=Math.round(r.i/r.items.length*100);
+ let h=`<div class="row sp"><span class="chip">${r.i+1} / ${r.items.length}</span><button class="btn ghost sm" data-a="quit">Sair</button></div><div class="bar" style="margin:10px 0"><i style="width:${pct}%"></i></div><div class="sub">${esc(r.title)}</div>`;
+ const q=it.t==='order'?'Monte a frase em inglês:':esc(it.q).replace(/___/g,'<span class="blank">&nbsp;&nbsp;&nbsp;</span>');
+ h+=`<div class="q">${q}</div>`;
+ if(it.t==='mc'){h+=it.opts.map((o,i)=>{let c='opt';if(r.res){if(i===it.a)c+=' ok';else if(i===r.sel)c+=' bad'}return `<button class="${c}" data-a="mc" data-v="${i}" ${r.res?'disabled':''}>${esc(o)}</button>`}).join('');
+  if(r.kind==='test'&&!r.res)h+=`<button class="opt idk" data-a="mc" data-v="-1">Não sei</button>`}
+ if(it.t==='fill'&&!r.res)h+=`<input type="text" id="fillin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Digite a resposta"><button class="btn" style="margin-top:10px" data-a="fill">Conferir</button>`;
+ if(it.t==='order'){if(!r.ord)r.ord=shuffle(it.words.map((w,i)=>i));
+  h+=`<div class="built">${r.built.map((i,k)=>`<button class="tile" ${r.res?'disabled':`data-a="ordundo" data-v="${k}"`}>${esc(it.words[i])}</button>`).join('')}</div><div class="tiles">${r.ord.map(i=>`<button class="tile ${r.built.includes(i)?'used':''}" data-a="ordpick" data-v="${i}">${esc(it.words[i])}</button>`).join('')}</div>`;
+  if(!r.res)h+=`<button class="btn" data-a="ordcheck" ${r.built.length===it.words.length?'':'disabled'}>Conferir</button>`}
+ if(r.res){const ok=r.res.ok;const ans=it.t==='mc'?it.opts[it.a]:it.t==='fill'?it.a[0]:it.a;
+  h+=`<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Correto!':'Não foi dessa vez.'}</b> ${ok?'':`Resposta: <span><b>${esc(ans)}</b></span>. `}<span>${it.why||''}</span></div><button class="btn" data-a="next">Continuar</button>`}
+ return h}
+
+/* ============ VIEWS ============ */
+/* ===== JARDIM: plantinhas e sessão de plantio ===== */
+const nm=s=>normA(s).replace(/^to /,'');
+function plant(g,o){o=o||{};const s=o.size||44,w=!!o.wilt;g=Math.max(0,Math.min(6,g|0));
+ const stem=w?'#a58f55':'#3f9d5a',leaf=w?'#b7a56a':'#4cb26a';
+ let p='<ellipse cx="24" cy="43" rx="15" ry="4" fill="#8b6b4a"/>';
+ if(g===0)p+='<ellipse cx="24" cy="40.5" rx="4" ry="2.6" fill="#b98a4a"/>';
+ else{const top=[0,34,29,25,21,19,19][g];
+  p+=`<path d="M24 41 L24 ${top}" stroke="${stem}" stroke-width="2.6" stroke-linecap="round" fill="none"/>`;
+  const lv=[[],[[-1,37]],[[-1,36],[1,32]],[[-1,36],[1,32],[-1,28]],[[-1,37],[1,33],[-1,29],[1,25]],[[-1,37],[1,33],[-1,29],[1,25]],[[-1,37],[1,33],[-1,29],[1,25]]][g];
+  lv.forEach(([d,y])=>{const cx=24+d*6.2;p+=`<ellipse cx="${cx}" cy="${y}" rx="5.4" ry="2.7" fill="${leaf}" transform="rotate(${d<0?-28:28} ${cx} ${y})"/>`});
+  if(g===4)p+=`<circle cx="24" cy="${top-1}" r="3" fill="${leaf}"/>`;
+  if(g===5)p+=`<circle cx="24" cy="${top-2}" r="4.6" fill="${w?'#c9a9a0':'#ef8fae'}"/>`;
+  if(g===6){const pc=w?'#c9a9a0':'#f28bb0';for(let i=0;i<5;i++){const a=i*72*Math.PI/180;p+=`<circle cx="${(24+Math.sin(a)*6.4).toFixed(1)}" cy="${(14.5-Math.cos(a)*6.4).toFixed(1)}" r="4.6" fill="${pc}"/>`}
+   p+=`<circle cx="24" cy="14.5" r="3.6" fill="${w?'#d3c28a':'#f6c445'}"/>`}}
+ return `<svg viewBox="0 0 48 48" width="${s}" height="${s}" aria-hidden="true">${p}</svg>`}
+const gp=c=>`<div class="gp">${plant(c.st==='new'?(c.g||0):6,{size:44,wilt:c.st!=='new'&&Date.now()-c.due>DAY})}<span>${esc(c.en)}</span></div>`;
+
+function pickOthers(c,fn,n){const pool=S.cards.filter(x=>x.kind!=='q'&&x.id!==c.id);const seen=new Set([fn(c).toLowerCase()]);const out=[];
+ for(const x of shuffle(pool)){const v=fn(x),k=v.toLowerCase();if(!seen.has(k)){seen.add(k);out.push(v)}if(out.length>=n)break}return out}
+function mkEx(c){const g=Math.min(5,c.g||0),en=nm(c.en),e={id:c.id,g,res:null,built:[],sel:null};
+ if(g<=2){const toEn=g!==0,corr=toEn?c.en:c.pt,others=pickOthers(c,x=>toEn?x.en:x.pt,3),opts=shuffle([corr].concat(others));
+  Object.assign(e,{type:g===2?'listen':'mc',toEn,opts,a:opts.indexOf(corr)});return e}
+ e.expect=en;
+ if(g===3){const toks=en.split(' ');let tiles;
+  if(toks.length===1){const extra=shuffle('abcdefghijklmnopqrstuvwxyz'.split('').filter(l=>!en.includes(l))).slice(0,3);tiles=shuffle(en.split('').concat(extra));e.join=''}
+  else{const ws=[...new Set([].concat(...S.cards.filter(x=>x.id!==c.id&&x.kind!=='q').map(x=>nm(x.en).split(' '))).filter(w=>w.length>1&&!toks.includes(w)))];tiles=shuffle(toks.concat(shuffle(ws).slice(0,2)));e.join=' '}
+  e.type='build';e.tiles=tiles;return e}
+ e.type=g===4?'type':'ltype';return e}
+function gNext(){const G=V.grow;if(!G.q.length){G.phase='done';G.ex=null;save();return}
+ let id=G.q.shift();if(id===G.lastId&&G.q.length){G.q.push(id);id=G.q.shift()}G.lastId=id;G.ex=mkEx(S.cards.find(c=>c.id===id))}
+function gAnswer(ok){const G=V.grow,e=G.ex,c=S.cards.find(x=>x.id===e.id);if(e.res)return;e.res={ok};noteTopic('voc',ok);const b=c.g||0;
+ if(ok){c.g=b+1;if(c.g>=6){c.g=6;c.st='learn';c.n=0;c.iv=0;c.ef=c.ef||2.5;c.due=Date.now()+4*36e5;S.intro.n++;touch('nw');e.bloom=true;G.bloomed++}}
+ else{c.g=b>=3?b-1:b;c.lapses=(c.lapses||0)+1}
+ e.after=c.g;sfx(ok?(e.bloom?'bloom':'ok'):'bad');
+ if(!(ok&&c.g>=6)){if(ok)G.q.push(c.id);else G.q.splice(Math.min(2,G.q.length),0,c.id)}
+ touch('ex');save();render()}
+
+function growView(){const G=V.grow;
+ if(G.phase==='intro'){const c=S.cards.find(x=>x.id===G.intro[G.ii]);
+  return `<div class="row sp"><span class="chip">Semente ${G.ii+1} / ${G.intro.length}</span><button class="btn ghost sm" data-a="gquit">Sair</button></div>
+  <div class="card" style="text-align:center;margin-top:14px">${plant(0,{size:64})}<div class="sub">Nova palavra</div><div class="big">${esc(c.en)}</div><button class="say" data-a="say" data-v="${esc(c.en)}" style="margin:2px auto">🔊</button><div style="font-size:22px;font-weight:650;color:var(--acc);margin-top:6px">${esc(c.pt)}</div>${c.ex?`<p class="ex">${esc(c.ex)}</p><button class="btn ghost sm" data-a="say" data-v="${esc(c.ex)}">🔊 Frase</button>`:''}</div>
+  <p class="sub small" style="text-align:center">Ela vai crescer a cada acerto: 6 desafios até florescer.</p>
+  <button class="btn" data-a="gintro" data-v="plant">Plantar</button><button class="btn ghost" data-a="gintro" data-v="known">Já sei esta (pular)</button>`}
+ if(G.phase==='done'){const n=G.bloomed;
+  return `<h1>${n?'Seu jardim floresceu':'Sessão encerrada'}</h1><div class="card" style="text-align:center"><div class="garden">${G.ids.map(id=>{const c=S.cards.find(x=>x.id===id);return c?gp(c):''}).join('')}</div><p>${n} ${n===1?'palavra floresceu':'palavras floresceram'} e ${n===1?'conta':'contam'} como aprendida${n===1?'':'s'}.</p><p class="sub small">Elas voltam na revisão em algumas horas e depois em intervalos cada vez maiores.</p></div>
+  ${newLeft()>0?`<button class="btn" data-a="plant">Plantar mais</button>`:`<button class="btn sec" data-a="moreNewPlant">Mais uma rodada (extra)</button>`}<button class="btn ghost" data-a="gexit">Concluir</button>`}
+ const e=G.ex,c=S.cards.find(x=>x.id===e.id);
+ const tot=G.ids.reduce((s,id)=>{const x=S.cards.find(y=>y.id===id);return s+Math.min(6,(x&&x.g)||0)},0),pct=Math.round(tot/(6*G.total)*100);
+ let h=`<div class="row sp"><span class="chip">${G.bloomed}/${G.total} floresceram</span><button class="btn ghost sm" data-a="gquit">Sair</button></div><div class="bar" style="margin:10px 0"><i style="width:${pct}%"></i></div>`;
+ h+=`<div style="text-align:center;margin:4px 0" class="${e.res&&e.res.ok?'pop':''}">${plant(e.res?e.after:e.g,{size:58})}</div>`;
+ const lab=t=>`<div class="sub" style="text-align:center">${t}</div>`,big=t=>`<div class="big" style="text-align:center">${esc(t)}</div>`;
+ const spk=`<div style="text-align:center"><button class="say" data-a="say" data-v="${esc(c.en)}" style="width:56px;height:56px;font-size:24px">🔊</button></div>`;
+ const opts=()=>e.opts.map((o,i)=>{let k='opt';if(e.res){if(i===e.a)k+=' ok';else if(i===e.sel)k+=' bad'}return `<button class="${k}" data-a="gmc" data-v="${i}" ${e.res?'disabled':''}>${esc(o)}</button>`}).join('');
+ if(e.type==='mc')h+=lab(e.toEn?'Como se diz em inglês?':'O que significa?')+big(e.toEn?c.pt:c.en)+(e.toEn?'':spk)+opts();
+ else if(e.type==='listen')h+=lab('Qual palavra você ouviu?')+spk+opts();
+ else if(e.type==='build'){h+=lab('Monte a tradução em inglês')+big(c.pt)+`<div class="built">${e.built.map((i,k)=>`<button class="tile" ${e.res?'disabled':`data-a="gundo" data-v="${k}"`}>${esc(e.tiles[i])}</button>`).join('')}</div><div class="tiles">${e.tiles.map((t,i)=>`<button class="tile ${e.built.includes(i)?'used':''}" data-a="gtile" data-v="${i}">${esc(t)}</button>`).join('')}</div>`;
+  if(!e.res)h+=`<div class="row"><button class="btn ghost" data-a="gidk">Não sei</button><button class="btn" data-a="gcheck" ${e.built.length?'':'disabled'}>Conferir</button></div>`}
+ else{h+=lab(e.type==='type'?'Escreva em inglês':'Escreva o que você ouviu')+(e.type==='type'?big(c.pt)+`<p class="sub" style="text-align:center;letter-spacing:.12em">${esc(e.expect.split(' ').map(w=>'_'.repeat(w.length)).join('   '))}</p>`:spk);
+  if(!e.res)h+=`<input type="text" id="gin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Digite aqui"><div class="row" style="margin-top:10px"><button class="btn ghost" data-a="gidk">Não sei</button><button class="btn" data-a="gfill">Conferir</button></div>`}
+ if(e.res){const ok=e.res.ok;
+  h+=`<div class="fb ${ok?'ok':'bad'}"><b>${ok?(e.bloom?'Floresceu! Palavra aprendida.':'Certo!'):'Quase.'}</b> ${ok?(e.bloom?'':`<span>Crescendo: ${e.after}/6</span>`):`<span><b>${esc(c.en)}</b> = ${esc(c.pt)}</span>`}${c.ex?`<br><span class="ex">${esc(c.ex)}</span>`:''}</div><div class="row"><button class="say" data-a="say" data-v="${esc(c.en)}">🔊</button><button class="btn" data-a="gnext">Continuar</button></div>`}
+ return h}
+
+function ladder(){const L=S.level;return `<div class="ladder">${LEVELS.map(l=>`<div class="${L&&(L===l||(LEVELS.indexOf(L)>LEVELS.indexOf(l)))?'on':''} ${L===l?'now':''}">${l}</div>`).join('')}</div><p class="sub small" style="margin-top:8px">Meta: C1 (fluência avançada)</p>`}
+function recLesson(){const ls=allLessons();const undone=ls.filter(l=>!S.lessons[l.id]);
+ const weak=ls.filter(l=>acc(l.id)!==null&&acc(l.id)<.75&&(!S.lessons[l.id]||S.lessons[l.id].best<80)).sort((a,b)=>acc(a.id)-acc(b.id));
+ if(weak.length)return weak[0];
+ const li=Math.max(0,LEVELS.indexOf(S.level||'A2'));
+ const ok=undone.filter(l=>LEVELS.indexOf(l.lvl)<=li+1);if(ok.length)return ok[0];
+ if(undone.length)return undone[0];
+ return ls.slice().sort((a,b)=>((S.lessons[a.id]||{}).best||0)-((S.lessons[b.id]||{}).best||0))[0]}
+function weakList(){return Object.keys(S.topics).filter(t=>{const o=S.topics[t];return o.r+o.w>=2}).map(t=>[t,acc(t)]).sort((a,b)=>a[1]-b[1]).slice(0,4)}
+
+function vHoje(){const due=dueCards().length,nl=newLeft(),rl=recLesson(),d=S.days[today()]||{ex:0,rev:0,nw:0};
+ const wk=weakList();
+ let h=`<div class="row sp"><div><h1>Olá, Filipe</h1><div class="sub">${S.streak.n?`${S.streak.n} ${S.streak.n===1?'dia':'dias'} seguidos`:'Vamos começar hoje'}${S.level?` · nível ${S.level==='A1'?'A1–A2':S.level}`:''}</div></div></div>`;
+ if(!S.placement)h+=`<div class="card" style="border-color:var(--acc)"><b>Comece pelo teste de nível</b><p class="sub">20 perguntas, uns 10 minutos. Serve para o app montar o seu caminho e saber onde estão as lacunas.</p><button class="btn" data-a="startTest">Fazer o teste</button></div>`;
+ h+=`<h2>Plano de hoje</h2>`;
+ h+=`<div class="item" data-a="go" data-v="revisar"><div class="grow"><div class="t">Revisão</div><div class="sub">${due?`${due} ${due===1?'item':'itens'} para revisar`:'Nada pendente agora'}</div></div>${due?`<span class="chip w">${due}</span>`:'<span class="chip">ok</span>'}</div>`;
+ h+=`<div class="item" data-a="go" data-v="palavras"><div class="grow"><div class="t">Plantar palavras novas</div><div class="sub">${S.intro.n}/${S.goal} floresceram hoje${S.cards.filter(c=>c.st==='new'&&(c.g||0)>0).length?` · ${S.cards.filter(c=>c.st==='new'&&(c.g||0)>0).length} brotando`:''}</div></div>${nl?`<span class="chip w">${nl}</span>`:'<span class="chip">meta batida</span>'}</div>`;
+ if(rl)h+=`<div class="item" data-a="openLesson" data-v="${esc(rl.id)}"><div class="grow"><div class="t">Lição: ${esc(rl.title)}</div><div class="sub">${S.lessons[rl.id]?`Melhor nota ${S.lessons[rl.id].best}%`:`Nível ${rl.lvl}`}${acc(rl.id)!==null&&acc(rl.id)<.75?' · recomendada pelos seus erros':''}</div></div><span class="chip">${rl.lvl}</span></div>`;
+ h+=`<div class="item" data-a="go" data-v="ler"><div class="grow"><div class="t">Leitura</div><div class="sub">Cole um texto e toque nas palavras desconhecidas</div></div></div>`;
+ if(SMP)h+=`<div class="item" data-a="aiTrain"><div class="grow"><div class="t">Treino sob medida com Claude</div><div class="sub">6 exercícios novos nos seus pontos fracos</div></div></div>`;
+ h+=`<h2>Seu caminho</h2><div class="card">${ladder()}</div>`;
+ if(wk.length)h+=`<h2>Pontos a reforçar</h2><div class="card">${wk.map(([t,a])=>`<div style="margin:6px 0"><div class="row sp small"><span>${esc(TOPIC_LABEL[t]||t)}</span><span class="mut">${Math.round(a*100)}%</span></div><div class="bar"><i style="width:${Math.round(a*100)}%;${a<.6?'background:var(--warm)':''}"></i></div></div>`).join('')}</div>`;
+ h+=`<p class="sub small" style="margin-top:20px">Hoje: ${d.ex||0} exercícios · ${d.rev||0} revisões · ${d.nw||0} palavras novas</p>`;
+ return h}
+
+function vLicoes(){
+ if(V.lesson){const l=allLessons().find(x=>x.id===V.lesson);if(l)return `<button class="btn ghost sm" data-a="closeLesson">← Lições</button><h1 style="margin-top:12px">${esc(l.title)}</h1><span class="chip">${esc(l.lvl)}</span><div class="card" style="font-size:16.5px">${l.intro}</div><button class="btn" data-a="startLesson" data-v="${esc(l.id)}">Começar exercícios (${l.ex.length})</button>`}
+ let h=`<h1>Lições</h1><p class="sub">Curtas, com explicação e exercícios. Erros viram revisão.</p>`;
+ LEVELS.forEach(lv=>{const ls=allLessons().filter(l=>l.lvl===lv);if(!ls.length)return;h+=`<h2>${lv}</h2>`+ls.map(l=>{const st=S.lessons[l.id];return `<div class="item" data-a="openLesson" data-v="${esc(l.id)}"><div class="grow"><div class="t">${esc(l.title)}</div><div class="sub">${st?`Melhor nota ${st.best}% · ${st.tries}x`:'Não feita'}</div></div>${st&&st.best>=80?'<span class="chip">✓</span>':''}</div>`}).join('')});
+ if(SMP)h+=`<h2>Treino com Claude</h2><div class="card"><p class="sub">Peça exercícios sobre um tema (opcional). Sem tema, uso seus pontos fracos.</p><input type="text" id="aitopic" placeholder="Ex.: preposições com verbos, vocabulário de trabalho"><button class="btn" style="margin-top:10px" data-a="aiTrain">Gerar 6 exercícios</button></div>`;
+ return h}
+
+function curReview(){const q=V.rev;if(!q)return null;return S.cards.find(c=>c.id===q.q[q.i])}
+function vRevisar(){
+ if(!V.rev){const due=dueCards().sort((a,b)=>a.due-b.due);
+  if(!due.length){const nxt=S.cards.filter(c=>c.st!=='new').sort((a,b)=>a.due-b.due)[0];
+   return `<h1>Revisão</h1><div class="card"><b>Nada para revisar agora.</b><p class="sub">${nxt?`Próximo item em ${nxt.due-Date.now()<36e5?'menos de 1 hora':nxt.due-Date.now()<DAY?'algumas horas':Math.ceil((nxt.due-Date.now())/DAY)+' dias'}.`:'Plante palavras novas ou faça uma lição para começar a revisar.'}</p></div><button class="btn sec" data-a="go" data-v="palavras">Plantar palavras novas</button><button class="btn ghost" data-a="revExtra">Revisão extra (praticar mesmo assim)</button>`}
+  return `<h1>Revisão</h1><div class="card"><div class="num">${due.length}</div><p class="sub">itens prontos para regar</p></div><button class="btn" data-a="revStart">Começar</button>`}
+ if(V.rev.i>=V.rev.q.length)return `<h1>Revisão concluída</h1><div class="card"><p>Você revisou ${V.rev.total} itens${V.rev.again?` e ${V.rev.again} voltaram para a fila`:''}.</p></div><button class="btn" data-a="revEnd">Voltar</button>`;
+ const c=curReview();if(!c){V.rev.i++;return vRevisar()}
+ const left=V.rev.q.length-V.rev.i,typed=c.kind!=='q'&&S.revMode!=='card',r=V.rev.res;
+ let h=`<div class="row sp"><span class="chip">${left} na fila</span><button class="btn ghost sm" data-a="revEnd">Sair</button></div>`;
+ if(c.kind!=='q')h+=`<div class="seg" style="margin:10px 0 0"><a class="${typed?'on':''}" data-a="rmode" data-v="type">Digitar</a><a class="${typed?'':'on'}" data-a="rmode" data-v="card">Cartão</a></div>`;
+ if(c.kind==='q')h+=`<div class="card" style="margin-top:14px"><div class="sub">Responda mentalmente</div><div class="q">${esc(c.q).replace(/___/g,'<span class="blank">&nbsp;&nbsp;&nbsp;</span>')}</div>${V.rev.show?`<div class="hr"></div><div class="big" style="font-size:24px;color:var(--acc)">${esc(c.a)}</div><p class="sub">${c.why||''}</p>`:''}</div>`;
+ else if(typed){h+=`<div class="card" style="margin-top:14px;text-align:center">${plant(6,{size:44,wilt:Date.now()-c.due>DAY})}<div class="sub">Como se diz em inglês?</div><div class="big" style="font-size:26px;color:var(--acc)">${esc(c.pt)}</div></div>`;
+  if(!r)h+=`<input type="text" id="rin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Digite em inglês"><button class="btn" style="margin-top:10px" data-a="rcheck">Conferir</button><button class="btn ghost" data-a="rcheck" data-v="idk">Não lembro</button>`;
+  else h+=`<div class="fb ${r.ok?'ok':'bad'}"><b>${r.ok?'Correto!':'Resposta:'}</b> <span><b>${esc(c.en)}</b></span>${c.ex?`<br><span class="ex">${esc(c.ex)}</span>`:''}</div><div class="row"><button class="say" data-a="say" data-v="${esc(c.en)}">🔊</button><button class="btn" data-a="rnext">Continuar</button></div>`;
+  return h}
+ else h+=`<div class="card" style="margin-top:14px;text-align:center"><div class="big">${esc(c.en)}</div><button class="say" data-a="say" data-v="${esc(c.en)}" style="margin:4px auto">🔊</button>${V.rev.show?`<div class="hr"></div><div style="font-size:22px;font-weight:650;color:var(--acc)">${esc(c.pt)}</div>${c.ex?`<p class="ex">${esc(c.ex)}</p>`:''}`:'<p class="sub">O que significa?</p>'}</div>`;
+ if(!V.rev.show)h+=`<button class="btn" data-a="revShow">Mostrar resposta</button>`;
+ else h+=`<div class="row" style="gap:6px">${[['Errei',0],['Difícil',1],['Bom',2],['Fácil',3]].map(([l,g])=>`<button class="btn ${g===0?'warm':g===2?'':'sec'}" style="padding:10px 4px;font-size:14px;margin:0" data-a="grade" data-v="${g}">${l}<br><span style="font-weight:500;font-size:11px;opacity:.85">${ivLabel(nextIv(c,g))}</span></button>`).join('')}</div>`;
+ return h}
+
+function vPalavras(){
+ const subs=[['novas','Plantar'],['jardim','Jardim'],['pratica','Prática'],['importar','Importar'],['lista','Lista']];
+ let h=`<h1>Palavras</h1><div class="seg s5">${subs.map(([k,l])=>`<a class="${V.sub===k?'on':''}" data-a="sub" data-v="${k}">${l}</a>`).join('')}</div>`;
+ if(V.sub==='novas'){const growing=S.cards.filter(c=>c.st==='new'&&(c.g||0)>0),seeds=S.cards.filter(c=>c.st==='new'&&!(c.g>0)),nl=newLeft();
+  h+=`<div class="row sp"><span class="chip">${S.intro.n}/${S.goal} hoje</span><span class="row small mut" style="gap:6px">Meta <button class="btn sec sm" data-a="goal" data-v="-1" style="padding:2px 10px">−</button><b>${S.goal}</b><button class="btn sec sm" data-a="goal" data-v="1" style="padding:2px 10px">+</button></span></div>`;
+  h+=`<div class="card"><div class="row sp"><div><div class="num">${S.intro.n}<span class="sub" style="font-size:16px;font-weight:600"> / ${S.goal}</span></div><div class="sub small">palavras floresceram hoje</div></div>${plant(6,{size:58})}</div><div class="hr"></div><div class="row small mut" style="gap:16px"><span>${seeds.length} sementes</span><span>${growing.length} brotando</span></div><p class="sub small" style="margin-bottom:0">Cada palavra passa por 6 desafios (escolher, ouvir, montar e escrever). Só quando floresce ela conta como aprendida.</p></div>`;
+  if(growing.length)h+=`<h2>Em crescimento</h2><div class="garden">${growing.map(gp).join('')}</div>`;
+  if(!growing.length&&!seeds.length)h+=`<div class="card"><b>Sem sementes na fila.</b><p class="sub">Importe uma lista ou salve palavras pela aba Ler.</p></div>`;
+  else if(nl>0||V.extra)h+=`<button class="btn" style="margin-top:14px" data-a="plant">${growing.length?'Continuar plantio':'Plantar'} (${Math.min(5,growing.length+seeds.length)} ${Math.min(5,growing.length+seeds.length)===1?'palavra':'palavras'})</button>`;
+  else h+=`<div class="card" style="margin-top:14px"><b>Meta de hoje batida.</b><p class="sub">Revise ou pratique. Se quiser, siga com mais uma rodada.</p></div><button class="btn sec" data-a="moreNewPlant">Mais uma rodada (extra)</button><button class="btn ghost" data-a="go" data-v="revisar">Ir para a revisão</button>`;
+  return h}
+ if(V.sub==='jardim'){const ws=S.cards.filter(c=>c.kind!=='q'),bl=ws.filter(c=>c.st!=='new'),gr=ws.filter(c=>c.st==='new'&&(c.g||0)>0),sd=ws.filter(c=>c.st==='new'&&!(c.g>0));
+  const wil=bl.filter(c=>Date.now()-c.due>DAY).length;
+  h+=`<div class="row small mut" style="gap:14px;margin-bottom:10px"><span><b>${bl.length}</b> flores</span><span><b>${gr.length}</b> brotando</span><span><b>${sd.length}</b> sementes</span>${wil?`<span class="err"><b>${wil}</b> murchando</span>`:''}</div>`;
+  const list=bl.concat(gr,sd).slice(0,150);
+  h+=list.length?`<div class="garden">${list.map(gp).join('')}</div>`:`<div class="card"><p class="sub">Seu jardim está vazio. Plante as primeiras palavras.</p></div>`;
+  if(bl.length+gr.length+sd.length>150)h+=`<p class="sub small">Mostrando 150 palavras.</p>`;
+  h+=`<p class="sub small">Flores murchas são palavras atrasadas na revisão. Regue na aba Revisar.</p>`;return h}
+ if(V.sub==='pratica'){const p=V.pr;
+  if(!p)return h+`<div class="card"><b>Montar a palavra</b><p class="sub">Veja o significado e monte a palavra em inglês com as letras. Não altera o cronograma de revisão.</p></div><button class="btn" data-a="prNew">Começar prática</button>`;
+  const c=p.card;h+=`<div class="card" style="margin-top:14px"><div class="sub">Como se diz em inglês?</div><div class="big" style="font-size:26px;color:var(--acc)">${esc(c.pt)}</div>${c.ex&&!p.res?`<p class="ex small">${esc(c.ex.replace(new RegExp(c.en.replace(/^to /,'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'),'_____'))}</p>`:''}</div>`;
+  if(p.mode==='chips'){h+=`<div class="built">${p.built.map((id,k)=>`<button class="tile" ${p.res?'disabled':`data-a="prUndo" data-v="${k}"`}>${esc(p.letters[id])}</button>`).join('')}</div><div class="tiles">${p.letters.map((l,id)=>`<button class="tile ${p.built.includes(id)?'used':''}" data-a="prPick" data-v="${id}">${esc(l)}</button>`).join('')}</div>`;
+   if(!p.res)h+=`<div class="row"><button class="btn ghost" data-a="prClear">Limpar</button><button class="btn" data-a="prCheck">Conferir</button></div>`}
+  else if(!p.res)h+=`<input type="text" id="prin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Digite em inglês"><button class="btn" style="margin-top:10px" data-a="prCheck">Conferir</button>`;
+  if(p.res)h+=`<div class="fb ${p.res.ok?'ok':'bad'}"><b>${p.res.ok?'Correto!':'Resposta:'}</b> <span><b>${esc(c.en)}</b></span></div><div class="row"><button class="say" data-a="say" data-v="${esc(c.en)}">🔊</button><button class="btn" data-a="prNew">Próxima</button></div>`;
+  h+=`<button class="btn ghost" style="margin-top:14px" data-a="prExit">Encerrar prática</button>`;return h}
+ if(V.sub==='importar')return h+`<div class="card"><b>Importar lista</b><p class="sub small">Uma palavra por linha: <code>inglês ; português ; exemplo (opcional)</code>. Aceita também tab ou barra vertical. Duplicadas são ignoradas.</p><textarea id="impta" placeholder="to look up ; procurar (em dicionário) ; I looked up the word.&#10;reliable ; confiável"></textarea><button class="btn" style="margin-top:10px" data-a="doImport">Importar</button></div>`;
+ const q=(V.q||'').toLowerCase(),list=S.cards.filter(c=>c.kind!=='q'&&(!q||c.en.toLowerCase().includes(q)||c.pt.toLowerCase().includes(q)));
+ const n=S.cards.filter(c=>c.kind!=='q');
+ h+=`<p class="sub">${n.length} palavras · ${n.filter(c=>c.st==='new').length} novas · ${n.filter(c=>c.st!=='new').length} em estudo</p><input type="text" id="srch" placeholder="Buscar" value="${esc(V.q||'')}">`;
+ h+=list.slice(0,80).map(c=>`<div class="item" style="cursor:default"><div class="grow"><div class="t">${esc(c.en)}</div><div class="sub">${esc(c.pt)}</div></div><span class="chip ${c.st==='new'?'w':''}">${c.st==='new'?((c.g||0)>0?'brotando':'semente'):ivLabel(c.iv||0)}</span><button class="btn ghost sm" data-a="wdel" data-v="${esc(c.id)}">✕</button></div>`).join('');
+ if(list.length>80)h+=`<p class="sub small">Mostrando 80 de ${list.length}. Use a busca.</p>`;return h}
+
+function sentences(t){return (t.match(/[^.!?\n]+[.!?]*/g)||[]).map(s=>s.trim()).filter(Boolean)}
+function vLer(){
+ let h=`<h1>Ler e escrever</h1><div class="seg"><a class="${V.rsub==='ler'?'on':''}" data-a="rsub" data-v="ler">Ler</a><a class="${V.rsub==='escrever'?'on':''}" data-a="rsub" data-v="escrever">Escrever</a></div>`;
+ if(V.rsub==='ler'){
+  if(!V.read)return h+`<div class="card"><p class="sub">Cole um texto em inglês (notícia, legenda, e-mail, letra de música que você tenha). Depois, toque em qualquer palavra para ver o significado no contexto e salvar.</p><textarea id="rtext" placeholder="Paste an English text here…"></textarea><button class="btn" style="margin-top:10px" data-a="readOpen">Abrir para leitura</button></div>`;
+  const sents=V.read.sents,HAVE=new Set(S.cards.map(c=>nm(c.en).toLowerCase()));
+  h+=`<div class="row sp" style="margin-bottom:8px"><button class="btn ghost sm" data-a="readClose">← Novo texto</button><button class="btn sec sm" data-a="translate">Traduzir texto</button></div><div class="card rd">${sents.map((s,si)=>s.replace(/([A-Za-z][A-Za-z'’-]*)|([^A-Za-z]+)/g,(m,w,o)=>w?`<span class="w${HAVE.has(w.toLowerCase())?' sv':''}" data-a="word" data-w="${esc(w)}" data-s="${si}">${esc(w)}</span>`:esc(o))).join(' ')}</div>`;
+  if(V.read.tr)h+=`<div class="card"><div class="sub">Tradução</div><p>${esc(V.read.tr)}</p></div>`;
+  if(V.read.pairs&&V.read.pairs.length)h+=`<h2>Tradução frase a frase</h2>`+V.read.pairs.map(p=>`<div class="card small"><span class="ex">${esc(p.en)}</span><br>${esc(p.pt)}</div>`).join('');
+  if(V.read.trErr)h+=`<p class="err small">${esc(V.read.trErr)}</p>`;
+  if(V.read.busy)h+=`<p class="sub">Traduzindo…</p>`;
+  return h}
+ if(!SMP)return h+`<div class="card"><p class="sub">A correção de textos usa o Claude e só funciona na versão aberta dentro do claude.ai, não na versão instalada no celular.</p></div>`;
+ h+=`<div class="card"><p class="sub">Escreva algo em inglês (um e-mail, um parágrafo sobre o seu dia). Eu corrijo e explico em português.</p><textarea id="wtext" placeholder="Today I go to work and…">${esc(V.wtext||'')}</textarea><button class="btn" style="margin-top:10px" data-a="wcheck" ${V.wbusy?'disabled':''}>${V.wbusy?'Corrigindo…':'Corrigir meu texto'}</button></div>`;
+ if(V.werr)h+=`<p class="err small">${esc(V.werr)}</p>`;
+ if(V.wres){const r=V.wres;h+=`<div class="card"><div class="sub">Versão corrigida</div><p style="font-size:18px">${esc(r.corrigido)}</p><button class="say" data-a="say" data-v="${esc(r.corrigido)}">🔊</button></div>`;
+  if((r.erros||[]).length)h+=`<h2>O que mudou</h2>`+r.erros.map(e=>`<div class="card small diff"><del>${esc(e.de)}</del> → <ins>${esc(e.para)}</ins><br><span class="mut">${esc(e.porque)}</span></div>`).join('');
+  if(r.dica)h+=`<div class="card small"><b>Dica:</b> ${esc(r.dica)}</div>`}
+ return h}
+
+function vMais(){
+ let h=`<h1>Mais</h1><div class="card"><div class="row sp"><span>Sons de acerto e erro</span><button class="btn sec sm" data-a="sndtog">${S.sound===false?'Desligado':'Ligado'}</button></div></div>`;
+ h+=`<h2>Vídeos e canais</h2>`;
+ if((EX.videos||[]).length)h+=`<div class="card"><b>Indicados para você</b>${EX.videos.map(v=>`<div style="margin:10px 0"><a class="lnk" href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.title)}</a><div class="sub small">${esc(v.why||'')}</div></div>`).join('')}</div>`;
+ h+=CHANNELS.map(c=>`<a class="item" style="text-decoration:none;color:inherit" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c[3])}" target="_blank" rel="noopener"><div class="grow"><div class="t">${esc(c[0])}</div><div class="sub">${esc(c[2])}</div></div><span class="chip">${esc(c[1])}</span></a>`).join('');
+ h+=`<p class="sub small">Dica: 1 vídeo por dia, com legenda em inglês. Anote 5 palavras e traga na aba Ler.</p>`;
+ h+=`<h2>Nível</h2><div class="card">${ladder()}<button class="btn sec" style="margin-top:12px" data-a="startTest">${S.placement?'Refazer teste de nível':'Fazer teste de nível'}</button></div>`;
+ h+=`<h2>Relatório e backup</h2><div class="card"><p class="sub small">O relatório resume seu progresso para eu ajustar o conteúdo na conversa. O backup guarda tudo em texto.</p><button class="btn sec" data-a="report">Copiar relatório</button><button class="btn sec" data-a="exportS">Copiar backup completo</button></div>`;
+ if(V.copyText)h+=`<textarea id="copyarea" readonly>${esc(V.copyText)}</textarea>`;
+ h+=`<div class="card"><b>Restaurar backup</b><textarea id="impstate" placeholder="Cole aqui o backup"></textarea><button class="btn ghost" style="margin-top:8px" data-a="importS">Restaurar</button></div>`;
+ h+=`<div class="card"><button class="btn ghost" data-a="reset">${V.resetArm?'Toque de novo para apagar tudo':'Apagar todo o progresso'}</button></div>`;
+ h+=`<p class="sub small">${DB?'Progresso salvo na sua conta.':'Progresso salvo só neste navegador.'}</p>`;return h}
+
+function report(){const wk=weakList(),n=S.cards.filter(c=>c.kind!=='q'),d=S.days;
+ const last7=Object.keys(d).sort().slice(-7).map(k=>`${k}: ${d[k].ex||0} ex, ${d[k].rev||0} rev, ${d[k].nw||0} novas`).join('\n');
+ return `RELATÓRIO ENGLISH PATH (${today()})\nNível estimado: ${S.level||'sem teste'} (meta C1)\nSequência: ${S.streak.n} dias\nPalavras: ${n.length} (${n.filter(c=>c.st==='new').length} novas, ${n.filter(c=>c.st!=='new').length} em estudo) · Itens de erro: ${S.cards.filter(c=>c.kind==='q').length}\nMeta diária: ${S.goal}\nTópicos (acerto):\n${Object.keys(S.topics).map(t=>`- ${TOPIC_LABEL[t]||t}: ${Math.round(acc(t)*100)}% (${S.topics[t].r}/${S.topics[t].r+S.topics[t].w})`).join('\n')||'- sem dados'}\nLições: ${Object.keys(S.lessons).map(k=>`${k} ${S.lessons[k].best}%`).join(', ')||'nenhuma'}\nÚltimos dias:\n${last7||'-'}`}
+
+function nav(){const due=dueCards().length;const T=[['hoje','Hoje'],['licoes','Lições'],['revisar','Revisar'],['palavras','Palavras'],['ler','Ler'],['mais','Mais']];
+ return `<nav>${T.map(([k,l])=>`<a href="#${k}" class="${V.tab===k&&!V.run&&!V.grow?'on':''}" data-a="tabgo" data-v="${k}">${l}${k==='revisar'&&due?`<b>${due>99?'99+':due}</b>`:''}</a>`).join('')}</nav>`}
+function sheet(){const s=V.sheet;if(!s)return '';const d=s.d||{};
+ return `<div class="sheet"><div>
+ <div class="row" style="gap:8px"><div class="grow"><input type="text" id="sh-en" value="${esc(s.head||s.w)}" autocapitalize="off" autocorrect="off" spellcheck="false" style="font-size:21px;font-weight:700;padding:8px 10px"></div><button class="say" data-a="say" data-v="${esc(s.head||s.w)}">🔊</button><button class="btn ghost sm" data-a="closeSheet">Fechar</button></div>
+ <p class="sub small" style="margin:6px 0">Dica: edite a palavra acima para salvar uma expressão (ex.: <i>look forward to</i>) e toque em Buscar.</p>
+ ${s.busy?'<p class="sub">Buscando…</p>':''}${s.err?`<p class="err small">${esc(s.err)}</p>`:''}
+ ${(d.ipa||d.classe||d.lema)?`<p class="small"><span class="mut">${esc(d.ipa||'')}</span>${d.classe?` · ${esc(d.classe)}`:''}${d.lema&&d.lema.toLowerCase()!==s.w.toLowerCase()?` · forma base: <b>${esc(d.lema)}</b>`:''}</p>`:''}
+ ${d.nota?`<p class="small">${esc(d.nota)}</p>`:''}
+ <p class="ex small">${esc(s.sent)}</p>
+ <input type="text" id="sh-pt" placeholder="Tradução (edite se quiser)" value="${esc(d.pt||'')}">
+ ${(d.alts||[]).length?`<div class="tiles" style="min-height:0">${d.alts.map(a=>`<button class="tile" data-a="alt" data-v="${esc(a)}">${esc(a)}</button>`).join('')}</div>`:''}
+ <div class="row" style="margin-top:10px"><button class="btn ghost" data-a="relook">Buscar</button><button class="btn" data-a="saveWord">Salvar palavra</button></div>
+ <button class="btn sec" data-a="saveSent">Salvar a frase inteira também</button></div></div>`}
+
+function route(){const h=(location.hash||'').slice(1);if(['hoje','licoes','revisar','palavras','ler','mais'].includes(h))V.tab=h}
+function render(){const fo=document.activeElement&&document.activeElement.id;
+ let body;
+ if(V.grow)body=growView();
+ else if(V.run)body=runView();
+ else body=({hoje:vHoje,licoes:vLicoes,revisar:vRevisar,palavras:vPalavras,ler:vLer,mais:vMais})[V.tab]();
+ $app.innerHTML=`<main>${body}</main>${V.sheet?sheet():''}${nav()}`;
+ if(fo==='srch'){const e=document.getElementById(fo);if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length)}}
+ if(V.run&&V.run.kind!=='test'&&curItem()&&curItem().t==='fill'&&!V.run.res&&!V.run.done){const e=document.getElementById('fillin');if(e)e.focus()}
+ ['gin','rin'].forEach(id=>{const e=document.getElementById(id);if(e)e.focus()});
+ if(V.grow){const G=V.grow;
+  if(G.phase==='intro'&&G.sp!==G.ii){G.sp=G.ii;const c=S.cards.find(x=>x.id===G.intro[G.ii]);if(c)speak(c.en)}
+  const e=G.ex;if(G.phase==='test'&&e){const c=S.cards.find(x=>x.id===e.id);
+   if(!e.res&&(e.type==='listen'||e.type==='ltype')&&!e.played){e.played=true;speak(c.en)}
+   if(e.res&&!e.res.ok&&!e.fbPlayed){e.fbPlayed=true;speak(c.en)}}}
+ if(V.copyText){const e=document.getElementById('copyarea');if(e){e.focus();e.select()}}}
+
+/* ============ SAMPLE (Claude no app) ============ */
+async function ask(prompt){if(!SMP)throw new Error('Recurso do Claude indisponível aqui.');
+ try{if(typeof SMP.json==='function')return await SMP.json(prompt)}catch(e){if(e&&e.code==='not_granted')throw new Error('Permissão negada.');}
+ const r=await SMP(prompt);const t=(r&&r.text)||'';const m=t.match(/\{[\s\S]*\}/);if(!m)throw new Error('Resposta inesperada.');return JSON.parse(m[0])}
+function aiMsg(e){if(e&&e.name==='TypeError')return 'Sem conexão com o serviço de busca. Digite a tradução.';return e&&e.code==='rate_limited'?'Muitas chamadas seguidas. Aguarde um pouco.':(e&&e.message)||'Não consegui agora. Tente de novo.'}
+
+async function aiTrain(){const topic=(document.getElementById('aitopic')||{}).value||'';
+ const weak=weakList().map(([t])=>TOPIC_LABEL[t]||t).join(', ')||'não identificados';
+ toast('Gerando exercícios…');
+ const p=`Você é professor de inglês. Aluno brasileiro, nível ${S.level||'B1'} (meta: C1). Pontos fracos: ${weak}. Tema pedido: ${topic||'livre, nos pontos fracos'}.
+Crie 6 exercícios variados e sem ambiguidade. Responda SOMENTE um JSON: {"titulo":"...","itens":[{"t":"mc","q":"frase com ___","opts":["a","b","c","d"],"a":0,"why":"explicação curta em português"},{"t":"fill","q":"frase com ___ (dica)","a":["resposta","variação"],"why":"..."},{"t":"order","words":["Have","you","ever","been"],"a":"Have you ever been there?","why":"..."}]}. Em mc, "a" é o índice (0 a 3) e varie a posição. Use frases naturais de trabalho, dia a dia ou entretenimento.`;
+ try{const r=await ask(p);const items=(r.itens||[]).filter(x=>x&&((x.t==='mc'&&Array.isArray(x.opts)&&typeof x.a==='number')||(x.t==='fill'&&Array.isArray(x.a))||(x.t==='order'&&Array.isArray(x.words)&&x.a)));
+  if(!items.length)throw new Error('Não consegui montar os exercícios.');
+  startRun({kind:'ai',title:r.titulo||'Treino com Claude',items})}catch(e){toast(aiMsg(e))}}
+
+/* ============ AÇÕES ============ */
+const A={
+ tabgo(v){V.run=null;V.grow=null;V.sheet=null;V.tab=v;history.replaceState(null,'','#'+v);render()},
+ go(v){V.tab=v;history.replaceState(null,'','#'+v);render();scrollTo(0,0)},
+ startTest(){startRun({kind:'test',title:'Teste de nível',items:shuffle(PLACEMENT.map((x,i)=>i)).sort((a,b)=>LEVELS.indexOf(PLACEMENT[a].lvl)-LEVELS.indexOf(PLACEMENT[b].lvl)).map(i=>PLACEMENT[i])})},
+ openLesson(v){V.run=null;V.tab='licoes';V.lesson=v;history.replaceState(null,'','#licoes');render();scrollTo(0,0)},
+ closeLesson(){V.lesson=null;render()},
+ startLesson(v){const l=allLessons().find(x=>x.id===v);startRun({kind:'lesson',lessonId:v,title:l.title,items:l.ex.map(x=>Object.assign({topic:v},x))});V.lesson=null},
+ aiTrain,
+ quit(){V.run=null;render()},
+ endrun(v){V.run=null;V.tab=v;history.replaceState(null,'','#'+v);render();scrollTo(0,0)},
+ mc(v){const r=V.run;if(r.res)return;const i=+v,it=curItem();r.sel=i;answer(i===it.a,i)},
+ fill(){const r=V.run;if(r.res)return;const it=curItem(),val=normA((document.getElementById('fillin')||{}).value||'');if(!val)return;answer(it.a.some(x=>normA(x)===val),val)},
+ ordpick(v){const r=V.run;if(r.res)return;const i=+v;if(!r.built.includes(i))r.built.push(i);render()},
+ ordundo(v){const r=V.run;if(r.res)return;r.built.splice(+v,1);render()},
+ ordcheck(){const r=V.run,it=curItem();if(r.res)return;answer(normO(r.built.map(i=>it.words[i]).join(' '))===normO(it.a),'')},
+ next(){next()},
+ /* revisão */
+ revStart(){const due=dueCards().sort((a,b)=>a.due-b.due).slice(0,40);V.rev={q:due.map(c=>c.id),i:0,show:false,total:0,again:0};render()},
+ revExtra(){const pool=shuffle(S.cards.filter(c=>c.st!=='new')).slice(0,15);if(!pool.length){toast('Aprenda algumas palavras primeiro');return}V.rev={q:pool.map(c=>c.id),i:0,show:false,total:0,again:0,extra:true};render()},
+ revShow(){V.rev.show=true;render()},
+ grade(v){const g=+v,c=curReview();if(!c)return;if(!V.rev.extra)applyGrade(c,g);V.rev.total++;touch('rev');
+  if(g===0){V.rev.q.push(c.id);V.rev.again++}V.rev.i++;V.rev.show=false;save();render()},
+ revEnd(){V.rev=null;render()},
+ /* palavras */
+ sub(v){V.sub=v;render()},
+ goal(v){S.goal=Math.max(1,Math.min(40,S.goal+(+v)));save();render()},
+ learn(){const c=S.cards.find(x=>x.st==='new');if(!c)return;c.st='learn';c.n=0;c.iv=0;c.due=Date.now()+10*60e3;S.intro.n++;touch('nw');render()},
+ known(){const c=S.cards.find(x=>x.st==='new');if(!c)return;c.st='learn';c.n=2;c.iv=6;c.due=Date.now()+6*DAY;S.intro.n++;touch('nw');render()},
+ moreNew(){V.extra=true;render()},
+ doImport(){const t=(document.getElementById('impta')||{}).value||'';const have=new Set(S.cards.map(c=>c.en.toLowerCase()));let n=0,dup=0;
+  t.split('\n').forEach(line=>{line=line.trim();if(!line)return;const p=line.split(/\t|;|\|/).map(x=>x.trim());if(p.length<2||!p[0]||!p[1])return;
+   if(have.has(p[0].toLowerCase())){dup++;return}have.add(p[0].toLowerCase());S.cards.push({id:'i'+hash(p[0].toLowerCase())+n,en:p[0],pt:p[1],ex:p[2]||'',st:'new',n:0,iv:0,ef:2.5,due:0,src:'import'});n++});
+  save();V.sub='novas';render();toast(`${n} importadas${dup?` · ${dup} repetidas`:''}`)},
+ wdel(v){S.cards=S.cards.filter(c=>c.id!==v);save();render()},
+ prNew(){const pool=S.cards.filter(c=>c.kind!=='q'&&c.st!=='new');const src=pool.length?pool:S.cards.filter(c=>c.kind!=='q');if(!src.length)return;
+  const c=src[Math.floor(Math.random()*src.length)],w=c.en.toLowerCase();
+  if(/^[a-z]+$/.test(w)){const extra=shuffle('abcdefghijklmnopqrstuvwxyz'.split('').filter(l=>!w.includes(l))).slice(0,3);V.pr={card:c,mode:'chips',letters:shuffle(w.split('').concat(extra)),built:[],res:null}}
+  else V.pr={card:c,mode:'type',res:null};render()},
+ prPick(v){const p=V.pr;if(p.res)return;if(!p.built.includes(+v))p.built.push(+v);render()},
+ prUndo(v){const p=V.pr;if(p.res)return;p.built.splice(+v,1);render()},
+ prClear(){V.pr.built=[];render()},
+ prCheck(){const p=V.pr;if(p.res)return;const w=p.card.en.toLowerCase();let g;
+  if(p.mode==='chips')g=p.built.map(i=>p.letters[i]).join('');else g=normA((document.getElementById('prin')||{}).value||'');
+  if(!g)return;const ok=normO(g)===normO(w);p.res={ok};sfx(ok?'ok':'bad');touch('ex');render()},
+ prExit(){V.pr=null;render()},
+ say(v){speak(v)},
+ /* jardim */
+ plant(){const need=newLeft()>0?Math.min(5,newLeft()):(V.extra?5:0);if(!need){toast('Meta de hoje batida');return}
+  const growing=S.cards.filter(c=>c.st==='new'&&(c.g||0)>0),seeds=S.cards.filter(c=>c.st==='new'&&!(c.g>0));
+  const picked=growing.concat(seeds).slice(0,need);if(!picked.length)return;
+  const intro=picked.filter(c=>!(c.g>0)).map(c=>c.id);
+  V.grow={ids:picked.map(c=>c.id),intro,ii:0,phase:intro.length?'intro':'test',q:shuffle(picked.map(c=>c.id)),bloomed:0,total:picked.length,ex:null,lastId:null};
+  if(!intro.length)gNext();render();scrollTo(0,0)},
+ moreNewPlant(){V.extra=true;A.plant()},
+ gintro(v){const G=V.grow,id=G.intro[G.ii],c=S.cards.find(x=>x.id===id);
+  if(v==='known'&&c){c.g=6;c.st='learn';c.n=2;c.iv=6;c.ef=2.5;c.due=Date.now()+6*DAY;S.intro.n++;touch('nw');G.q=G.q.filter(x=>x!==id);G.bloomed++}
+  G.ii++;if(G.ii>=G.intro.length){G.phase='test';gNext()}save();render()},
+ gmc(v){const e=V.grow.ex;if(e.res)return;e.sel=+v;gAnswer(+v===e.a)},
+ gfill(){const e=V.grow.ex;if(e.res)return;const val=nm((document.getElementById('gin')||{}).value||'');if(!val)return;gAnswer(normO(val)===normO(e.expect))},
+ gtile(v){const e=V.grow.ex;if(e.res)return;if(!e.built.includes(+v))e.built.push(+v);render()},
+ gundo(v){const e=V.grow.ex;if(e.res)return;e.built.splice(+v,1);render()},
+ gcheck(){const e=V.grow.ex;if(e.res)return;gAnswer(e.built.map(i=>e.tiles[i]).join(e.join)===e.expect)},
+ gidk(){const e=V.grow.ex;if(e.res)return;gAnswer(false)},
+ gnext(){gNext();render()},
+ gquit(){V.grow=null;render()},
+ gexit(){V.grow=null;V.sub='novas';render()},
+ /* revisão digitada */
+ rcheck(v){const c=curReview();if(!c||V.rev.res)return;let ok=false;
+  if(v!=='idk'){const val=nm((document.getElementById('rin')||{}).value||'');if(!val)return;ok=normO(val)===normO(nm(c.en))}
+  if(!V.rev.extra)applyGrade(c,ok?2:0);V.rev.total++;touch('rev');V.rev.res={ok};sfx(ok?'ok':'bad');
+  if(!ok){V.rev.q.push(c.id);V.rev.again++}save();render();if(!ok)speak(c.en)},
+ rnext(){V.rev.i++;V.rev.res=null;V.rev.show=false;render()},
+ rmode(v){S.revMode=v;V.rev.res=null;V.rev.show=false;save();render()},
+ /* ler */
+ rsub(v){V.rsub=v;render()},
+ readOpen(){const t=((document.getElementById('rtext')||{}).value||'').trim();if(!t)return;V.read={text:t,sents:sentences(t)};render()},
+ readClose(){V.read=null;V.sheet=null;render()},
+ async translate(){if(!V.read||V.read.busy)return;V.read.busy=true;V.read.trErr=null;V.read.tr=null;V.read.pairs=null;render();
+  try{if(SMP){const r=await ask(`Traduza para português do Brasil, de forma natural. Responda SOMENTE JSON: {"pt":"..."}\n\nTexto:\n${V.read.text.slice(0,3000)}`);V.read.tr=r.pt}
+   else{V.read.pairs=[];for(const se of V.read.sents.slice(0,60)){const pt=await translateFree(se);V.read.pairs.push({en:se,pt});render()}}}
+  catch(e){V.read.trErr=aiMsg(e)}
+  V.read.busy=false;render()},
+ async word(v,el){const w=el.getAttribute('data-w'),s=V.read.sents[+el.getAttribute('data-s')];V.sheet={w,head:w,sent:s,busy:true,d:null,err:null};render();speak(w);await A.lookup(w)},
+ async lookup(w){const sh=V.sheet;if(!sh)return;sh.busy=true;sh.err=null;render();
+  try{let r;
+   if(SMP){r=await ask(`Palavra: "${w}". Frase onde apareceu: "${sh.sent}". Responda SOMENTE JSON: {"pt":"tradução curta no contexto (português do Brasil)","lema":"forma base em inglês (ou a expressão/phrasal verb se for o caso)","classe":"classe gramatical em português","nota":"uma frase curta em português só se houver algo útil (phrasal verb, falso cognato, gíria); senão vazio"}`)}
+   else r=await freeLookup(w);
+   if(V.sheet===sh){sh.d=r;if(r.lema&&sh.head.toLowerCase()===sh.w.toLowerCase())sh.head=r.lema;sh.busy=false;render()}}
+  catch(e){if(V.sheet===sh){sh.busy=false;sh.err=aiMsg(e);render()}}},
+ relook(){const sh=V.sheet;if(!sh)return;const w=((document.getElementById('sh-en')||{}).value||'').trim();if(!w)return;sh.head=w;A.lookup(w)},
+ alt(v){const e=document.getElementById('sh-pt');if(e)e.value=v},
+ async saveSent(){const s=V.sheet;if(!s)return;toast('Traduzindo a frase…');
+  try{let pt;if(SMP){pt=(await ask(`Traduza para português do Brasil, de forma natural. Responda SOMENTE JSON: {"pt":"..."}\n\n${s.sent}`)).pt}else pt=await translateFree(s.sent);
+   const low=s.sent.toLowerCase();if(S.cards.some(c=>c.en.toLowerCase()===low)){toast('Frase já salva');return}
+   S.cards.push({id:'p'+hash(low),en:s.sent,pt,ex:'',st:'new',n:0,iv:0,ef:2.5,due:0,src:'texto'});save();V.sheet=null;render();toast('Frase salva nas sementes')}
+  catch(e){toast(aiMsg(e))}},
+ closeSheet(){V.sheet=null;render()},
+ saveWord(){const s=V.sheet,pt=((document.getElementById('sh-pt')||{}).value||'').trim();if(!pt){toast('Escreva a tradução');return}
+  const en=((document.getElementById('sh-en')||{}).value||s.head||s.w).trim(),low=en.toLowerCase();if(!en)return;
+  if(S.cards.some(c=>c.en.toLowerCase()===low)){toast('Já está no vocabulário');V.sheet=null;render();return}
+  S.cards.push({id:'t'+hash(low),en,pt,ex:s.sent,st:'new',n:0,iv:0,ef:2.5,due:0,src:'texto'});save();V.sheet=null;render();toast('Salva nas palavras novas')},
+ async wcheck(){const t=((document.getElementById('wtext')||{}).value||'').trim();if(!t||V.wbusy)return;V.wtext=t;V.wbusy=true;V.werr=null;V.wres=null;render();
+  try{const r=await ask(`Você é professor de inglês de um brasileiro (nível ${S.level||'B1'}). Corrija o texto abaixo mantendo o estilo dele. Responda SOMENTE JSON: {"corrigido":"texto corrigido","erros":[{"de":"trecho original","para":"trecho corrigido","porque":"explicação curta em português"}],"dica":"uma dica geral curta em português ou vazio"}. Máximo 6 erros, os mais importantes. Se estiver correto, erros vazio.\n\nTexto:\n${t.slice(0,2500)}`);V.wres=r;touch('ex')}catch(e){V.werr=aiMsg(e)}
+  V.wbusy=false;render()},
+ /* mais */
+ sndtog(){S.sound=S.sound===false?true:false;save();if(S.sound!==false)sfx('ok');render()},
+ report(){copy(report())},
+ exportS(){copy(JSON.stringify(S))},
+ importS(){try{const r=JSON.parse((document.getElementById('impstate')||{}).value||'');if(!r||!Array.isArray(r.cards))throw 0;S=r;save();toast('Backup restaurado');render()}catch(e){toast('Backup inválido')}},
+ reset(){if(!V.resetArm){V.resetArm=true;render();setTimeout(()=>{V.resetArm=false;if(V.tab==='mais')render()},4000);return}
+  S=fresh();V.resetArm=false;V.rev=null;V.pr=null;V.read=null;save();render();toast('Progresso apagado')}
+};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.getAttribute('data-a');if(a==='tabgo')e.preventDefault();
+ if(A[a]){try{A[a](el.getAttribute('data-v'),el)}catch(err){console.error(err)}}});
+document.addEventListener('input',e=>{if(e.target.id==='srch'){V.q=e.target.value;render()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){const id=e.target.id;if(id==='fillin')A.fill();else if(id==='prin')A.prCheck();else if(id==='gin')A.gfill();else if(id==='rin')A.rcheck()}});
+window.addEventListener('hashchange',()=>{route();render()});
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){window.addEventListener('load',()=>{try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}})}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+init();
+</script>
+</body>
+</html>
